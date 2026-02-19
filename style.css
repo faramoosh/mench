@@ -1,0 +1,260 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: linear-gradient(145deg, #1e3c4f 0%, #2b5c6f 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 8px;
+    touch-action: manipulation;
+}
+
+.game-container {
+    max-width: 480px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 36px;
+    padding: 16px 12px;
+    box-shadow: 0 25px 40px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.game-title {
+    text-align: center;
+    color: #ffd966;
+    font-size: 1.8rem;
+    margin-bottom: 12px;
+    text-shadow: 2px 2px 0 #b4652a;
+}
+
+/* انتخاب بازیکن */
+.player-selector {
+    background: #213743;
+    padding: 15px;
+    border-radius: 30px;
+    margin-bottom: 15px;
+    text-align: center;
+    color: white;
+    border: 1px solid #5f9db2;
+}
+
+.player-selector label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 1rem;
+    color: #ffd966;
+}
+
+.player-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.player-count-btn {
+    background: #3a5a6b;
+    border: none;
+    color: white;
+    padding: 10px 0;
+    border-radius: 30px;
+    flex: 1;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid #7fa9b8;
+}
+
+.player-count-btn.active {
+    background: #52b9d1;
+    transform: scale(1.02);
+    box-shadow: 0 3px 0 #217a94;
+    border-color: #b5e4f0;
+}
+
+.start-game-btn {
+    background: #ffb347;
+    border: none;
+    color: #1e2f3a;
+    font-weight: bold;
+    padding: 12px 20px;
+    border-radius: 40px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #a8651e;
+    transition: all 0.1s ease;
+    width: 100%;
+}
+
+.start-game-btn:active {
+    transform: translateY(4px);
+    box-shadow: 0 0 0 #a8651e;
+}
+
+/* وضعیت بازی */
+.game-status {
+    background: #213743;
+    border-radius: 30px;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #5f9db2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.turn-indicator {
+    background: #52b9d1;
+    padding: 8px 15px;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    border: 1px solid #9ad4e8;
+}
+
+.dice-result {
+    background: #3a5a6b;
+    padding: 8px 15px;
+    border-radius: 30px;
+    color: white;
+    font-size: 1rem;
+}
+
+/* صفحه بازی منچ */
+.ludo-board {
+    background: #ecd8b4;
+    border-radius: 20px;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(11, 1fr);
+    gap: 4px;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    box-shadow: inset 0 0 0 3px #aa8e6c, 0 10px 20px rgba(0, 0, 0, 0.3);
+    margin-bottom: 15px;
+}
+
+.ludo-cell {
+    aspect-ratio: 1 / 1;
+    border-radius: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+    position: relative;
+    box-shadow: 0 2px 0 #b69b7c;
+    padding: 2px;
+}
+
+/* رنگ‌بندی مسیرها */
+.ludo-cell.red-path { background: #ffcdd2; }
+.ludo-cell.blue-path { background: #bbdefb; }
+.ludo-cell.green-path { background: #c8e6c9; }
+.ludo-cell.yellow-path { background: #fff9c4; }
+
+/* خانه‌های شروع */
+.ludo-cell.start-red { background: #ff5252; color: white; }
+.ludo-cell.start-blue { background: #4287f5; color: white; }
+.ludo-cell.start-green { background: #4caf50; color: white; }
+.ludo-cell.start-yellow { background: #ffeb3b; color: black; }
+
+/* خانه‌های امن */
+.ludo-cell.safe {
+    border: 3px solid gold;
+    box-shadow: 0 0 10px gold;
+}
+
+/* مهره‌های بازیکنان */
+.piece {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin: 1px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: white;
+    box-shadow: 0 2px 0 rgba(0,0,0,0.3);
+}
+
+.piece.red { background: #ff0000; }
+.piece.blue { background: #0000ff; }
+.piece.green { background: #00aa00; }
+.piece.yellow { background: #cccc00; color: black; }
+
+/* بخش تاس */
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #1d3e4b;
+    padding: 12px;
+    border-radius: 60px;
+    border: 1px solid #5899b3;
+    margin-bottom: 8px;
+}
+
+.dice-container {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 5px;
+    box-shadow: inset 0 -3px 0 #aaaaaa;
+}
+
+.dice {
+    font-size: 2.8rem;
+    line-height: 1;
+    min-width: 70px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.roll-btn {
+    background: #52b9d1;
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-size: 1.3rem;
+    padding: 14px 20px;
+    border-radius: 50px;
+    flex: 1;
+    cursor: pointer;
+    box-shadow: 0 5px 0 #217a94;
+    transition: all 0.1s ease;
+}
+
+.roll-btn:active {
+    transform: translateY(5px);
+    box-shadow: 0 0 0 #217a94;
+}
+
+.roll-btn:disabled {
+    opacity: 0.5;
+    transform: translateY(0);
+    box-shadow: 0 4px 0 #217a94;
+    pointer-events: none;
+}
+
+.game-message {
+    margin-top: 12px;
+    text-align: center;
+    background: #152d36;
+    color: #cbe7f1;
+    padding: 10px;
+    border-radius: 30px;
+    font-size: 0.95rem;
+    border: 1px solid #408697;
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>منچ | بازی گروهی</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1 class="game-title">🎲 بازی منچ 🎲</h1>
+
+        <!-- انتخاب تعداد بازیکنان -->
+        <div class="player-selector" id="playerSelector">
+            <label>تعداد بازیکنان:</label>
+            <div class="player-buttons">
+                <button class="player-count-btn active" data-count="2">۲ نفر</button>
+                <button class="player-count-btn" data-count="3">۳ نفر</button>
+                <button class="player-count-btn" data-count="4">۴ نفر</button>
+            </div>
+            <button id="startGameBtn" class="start-game-btn">شروع بازی جدید</button>
+        </div>
+
+        <!-- وضعیت بازی -->
+        <div class="game-status" id="gameStatus" style="display: none;">
+            <div class="turn-indicator">
+                <span id="turnEmoji">🔴</span>
+                <span id="turnText">نوبت بازیکن قرمز</span>
+            </div>
+            <div class="dice-result" id="diceResult">
+                تاس: <span id="diceValue">-</span>
+            </div>
+        </div>
+
+        <!-- صفحه بازی منچ -->
+        <div id="board" class="board ludo-board"></div>
+
+        <!-- بخش تاس و کنترل -->
+        <div class="controls">
+            <div class="dice-container">
+                <div id="dice" class="dice">🎲</div>
+            </div>
+            <button id="rollDiceBtn" class="roll-btn">پرتاب تاس</button>
+        </div>
+
+        <!-- پیام‌های بازی -->
+        <div id="gameMessage" class="game-message">تعداد بازیکنان را انتخاب کنید</div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

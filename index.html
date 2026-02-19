@@ -1,48 +1,49 @@
-      <!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>منچ | بازی گروهی</title>
+    <title>منچ | بازی گروهی نوستالژیک</title>
     <style>
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background: linear-gradient(145deg, #1e3c4f, #2b5c6f);
+            font-family: 'Vazir', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(145deg, #1e3c4f 0%, #2b5c6f 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 8px;
+            touch-action: manipulation;
         }
 
         .game-container {
-            max-width: 480px;
+            max-width: 500px;
             width: 100%;
             background: #2a4e5e;
             border-radius: 40px;
-            padding: 16px;
-            border: 3px solid #ffd966;
+            padding: 16px 12px;
             box-shadow: 0 20px 30px rgba(0,0,0,0.5);
+            border: 2px solid #ffd966;
         }
 
-        h1 {
+        .game-title {
             text-align: center;
             color: #ffd966;
-            font-size: 2.5rem;
-            margin-bottom: 15px;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
             text-shadow: 3px 3px 0 #b4652a;
         }
 
         /* انتخاب بازیکن */
-        .selector {
+        .player-selector {
             background: #213743;
             padding: 15px;
             border-radius: 30px;
@@ -50,63 +51,66 @@
             border: 2px solid #5f9db2;
         }
 
-        .selector label {
+        .player-selector label {
             display: block;
             text-align: center;
             color: #ffd966;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             margin-bottom: 10px;
         }
 
-        .player-btns {
+        .player-buttons {
             display: flex;
             gap: 10px;
+            justify-content: center;
             margin-bottom: 15px;
         }
 
-        .player-btn {
-            flex: 1;
+        .player-count-btn {
             background: #3a5a6b;
             border: none;
             color: white;
-            padding: 12px;
+            padding: 12px 0;
             border-radius: 30px;
-            font-size: 1.1rem;
+            flex: 1;
+            font-size: 1.2rem;
             font-weight: bold;
-            border: 2px solid #7fa9b8;
             cursor: pointer;
+            border: 2px solid #7fa9b8;
+            transition: 0.2s;
         }
 
-        .player-btn.active {
+        .player-count-btn.active {
             background: #52b9d1;
-            border-color: #ffd966;
             transform: scale(1.02);
+            border-color: #ffd966;
+            box-shadow: 0 3px 0 #217a94;
         }
 
-        .start-btn {
-            width: 100%;
+        .start-game-btn {
             background: #ffb347;
             border: none;
             color: #1e2f3a;
+            font-weight: bold;
             padding: 14px;
             border-radius: 40px;
             font-size: 1.3rem;
-            font-weight: bold;
             cursor: pointer;
             box-shadow: 0 5px 0 #a8651e;
             transition: 0.1s;
+            width: 100%;
         }
 
-        .start-btn:active {
+        .start-game-btn:active {
             transform: translateY(5px);
             box-shadow: none;
         }
 
         /* وضعیت بازی */
-        .status {
+        .game-status {
             background: #213743;
-            padding: 12px;
             border-radius: 30px;
+            padding: 12px;
             margin-bottom: 15px;
             display: flex;
             justify-content: space-between;
@@ -114,9 +118,9 @@
             border: 2px solid #5f9db2;
         }
 
-        .turn {
+        .turn-indicator {
             background: #52b9d1;
-            padding: 8px 20px;
+            padding: 8px 18px;
             border-radius: 40px;
             font-size: 1.2rem;
             font-weight: bold;
@@ -124,89 +128,95 @@
             border: 2px solid #ffd966;
         }
 
-        .dice-show {
+        .dice-value {
             background: #3a5a6b;
-            padding: 8px 20px;
+            padding: 8px 18px;
             border-radius: 40px;
-            font-size: 1.3rem;
             color: white;
+            font-size: 1.3rem;
             border: 2px solid #ffb347;
         }
 
-        /* ===== صفحه منچ ساده شده ===== */
-        .board {
+        /* ========== صفحه منچ اصلی ========== */
+        .mench-board {
             background: #ecd8b4;
             border-radius: 30px;
-            padding: 20px;
+            padding: 15px;
             display: grid;
-            grid-template-columns: repeat(11, 1fr);
-            gap: 5px;
-            aspect-ratio: 1/1;
+            grid-template-columns: repeat(15, 1fr);
+            gap: 3px;
+            aspect-ratio: 1 / 1;
             width: 100%;
             border: 4px solid #aa8e6c;
+            box-shadow: inset 0 0 0 3px #8b6f4c;
             margin-bottom: 15px;
         }
 
+        /* سلول‌های صفحه */
         .cell {
-            aspect-ratio: 1/1;
-            border-radius: 10px;
+            aspect-ratio: 1 / 1;
+            border-radius: 8px;
             display: flex;
+            flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            font-weight: bold;
             position: relative;
-            box-shadow: 0 3px 0 #8b6f4c;
+            box-shadow: 0 2px 0 #8b6f4c;
+            font-size: 0.8rem;
         }
 
-        /* مسیر اصلی - 40 خانه */
-        .path-red { background: #ff9999; }
-        .path-blue { background: #9999ff; }
-        .path-green { background: #99cc99; }
-        .path-yellow { background: #ffff99; }
+        /* خانه‌های مسیر اصلی */
+        .cell.path-red { background: #ffb3b3; }
+        .cell.path-blue { background: #b3d9ff; }
+        .cell.path-green { background: #c1f0c1; }
+        .cell.path-yellow { background: #fff5b3; }
 
-        /* خانه‌های شروع */
-        .home-red { background: #ff4444; border: 2px solid white; }
-        .home-blue { background: #4444ff; border: 2px solid white; }
-        .home-green { background: #44aa44; border: 2px solid white; }
-        .home-yellow { background: #ffdd44; border: 2px solid white; }
+        /* خانه‌های شروع (محل مهره‌ها) */
+        .cell.home-red { background: #ff0000; }
+        .cell.home-blue { background: #0000ff; }
+        .cell.home-green { background: #00aa00; }
+        .cell.home-yellow { background: #ffcc00; }
 
-        /* خانه‌های نهایی */
-        .finish-red { background: #ff8888; border: 3px solid #cc0000; }
-        .finish-blue { background: #8888ff; border: 3px solid #0000cc; }
-        .finish-green { background: #88cc88; border: 3px solid #008800; }
-        .finish-yellow { background: #ffee88; border: 3px solid #aa8800; }
+        /* خانه‌های انتهایی */
+        .cell.finish-red { background: #ff6666; border: 2px solid red; }
+        .cell.finish-blue { background: #6666ff; border: 2px solid blue; }
+        .cell.finish-green { background: #66cc66; border: 2px solid green; }
+        .cell.finish-yellow { background: #ffdd66; border: 2px solid goldenrod; }
 
-        /* خانه امن */
-        .safe {
-            border: 4px solid gold;
+        /* خانه‌های امن (ستاره‌دار) */
+        .cell.safe {
+            border: 3px solid gold;
             box-shadow: 0 0 15px gold;
+            z-index: 2;
         }
 
-        /* مهره‌ها */
+        /* مهره‌های بازی */
         .piece {
-            width: 24px;
-            height: 24px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
             display: inline-flex;
             justify-content: center;
             align-items: center;
-            color: white;
             font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 0 black;
             margin: 1px;
             font-size: 0.8rem;
-            box-shadow: 0 3px 0 rgba(0,0,0,0.3);
-            border: 2px solid white;
+            box-shadow: 0 3px 0 rgba(0,0,0,0.4);
+            border: 1px solid white;
         }
 
-        .red-piece { background: #cc0000; }
-        .blue-piece { background: #0000cc; }
-        .green-piece { background: #008800; }
-        .yellow-piece { background: #aa8800; }
+        .piece.red { background: #cc0000; }
+        .piece.blue { background: #0000cc; }
+        .piece.green { background: #008800; }
+        .piece.yellow { background: #b8860b; color: white; }
 
-        /* کنترل */
+        /* بخش تاس */
         .controls {
             display: flex;
-            gap: 10px;
+            align-items: center;
+            gap: 12px;
             background: #1d3e4b;
             padding: 12px;
             border-radius: 60px;
@@ -216,27 +226,30 @@
 
         .dice-box {
             background: white;
-            border-radius: 20px;
-            padding: 5px 20px;
+            border-radius: 25px;
+            padding: 5px 15px;
             box-shadow: inset 0 -4px 0 #aaa;
         }
 
         .dice {
-            font-size: 3rem;
+            font-size: 3.2rem;
+            line-height: 1;
             min-width: 80px;
             text-align: center;
         }
 
         .roll-btn {
-            flex: 1;
             background: #52b9d1;
             border: none;
             color: white;
-            font-size: 1.4rem;
             font-weight: bold;
+            font-size: 1.5rem;
+            padding: 16px 20px;
             border-radius: 50px;
+            flex: 1;
             cursor: pointer;
             box-shadow: 0 6px 0 #217a94;
+            transition: 0.1s;
             border: 2px solid #b5e4f0;
         }
 
@@ -245,7 +258,13 @@
             box-shadow: none;
         }
 
-        .message {
+        .roll-btn:disabled {
+            opacity: 0.5;
+            transform: translateY(0);
+            box-shadow: 0 4px 0 #217a94;
+        }
+
+        .game-message {
             background: #152d36;
             color: #cbe7f1;
             padding: 12px;
@@ -253,312 +272,485 @@
             text-align: center;
             font-size: 1rem;
             border: 2px solid #ffb347;
+            margin-top: 8px;
         }
     </style>
 </head>
 <body>
     <div class="game-container">
-        <h1>🎲 منچ 🎲</h1>
+        <h1 class="game-title">🎲 منچ 🎲</h1>
 
         <!-- انتخاب بازیکن -->
-        <div class="selector" id="selector">
+        <div class="player-selector" id="playerSelector">
             <label>👥 تعداد بازیکنان:</label>
-            <div class="player-btns">
-                <button class="player-btn active" data-count="2">۲ نفر</button>
-                <button class="player-btn" data-count="3">۳ نفر</button>
-                <button class="player-btn" data-count="4">۴ نفر</button>
+            <div class="player-buttons">
+                <button class="player-count-btn active" data-count="2">۲ نفر</button>
+                <button class="player-count-btn" data-count="3">۳ نفر</button>
+                <button class="player-count-btn" data-count="4">۴ نفر</button>
             </div>
-            <button class="start-btn" id="startBtn">شروع بازی</button>
+            <button id="startGameBtn" class="start-game-btn">شروع بازی جدید</button>
         </div>
 
-        <!-- وضعیت -->
-        <div class="status" id="status" style="display: none;">
-            <div class="turn" id="turn">🔴 قرمز</div>
-            <div class="dice-show" id="diceShow">🎲 -</div>
+        <!-- وضعیت بازی -->
+        <div class="game-status" id="gameStatus" style="display: none;">
+            <div class="turn-indicator" id="turnIndicator">🔴 قرمز</div>
+            <div class="dice-value" id="diceValue">🎲 -</div>
         </div>
 
-        <!-- صفحه بازی -->
-        <div class="board" id="board"></div>
+        <!-- صفحه بازی منچ -->
+        <div id="board" class="mench-board"></div>
 
-        <!-- کنترل -->
+        <!-- کنترل تاس -->
         <div class="controls">
             <div class="dice-box">
-                <div class="dice" id="dice">🎲</div>
+                <div id="dice" class="dice">🎲</div>
             </div>
-            <button class="roll-btn" id="rollBtn">پرتاب</button>
+            <button id="rollDiceBtn" class="roll-btn">پرتاب تاس</button>
         </div>
 
-        <!-- پیام -->
-        <div class="message" id="message">تعداد بازیکنان را انتخاب کنید</div>
+        <!-- پیام بازی -->
+        <div id="gameMessage" class="game-message">تعداد بازیکنان را انتخاب کنید</div>
     </div>
 
     <script>
-        // ==================== بازیکنان ====================
-        const players = [
-            { id: 0, name: 'قرمز', emoji: '🔴', color: 'red', startX: 0, startY: 0 },
-            { id: 1, name: 'آبی', emoji: '🔵', color: 'blue', startX: 7, startY: 0 },
-            { id: 2, name: 'سبز', emoji: '🟢', color: 'green', startX: 0, startY: 7 },
-            { id: 3, name: 'زرد', emoji: '🟡', color: 'yellow', startX: 7, startY: 7 }
-        ];
+        (function() {
+            // ==================== تنظیمات صدا ====================
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            let audioCtx = null;
+            let soundsEnabled = true;
 
-        // مسیر حرکت (40 خانه)
-        const path = [
-            // 0-9: مسیر قرمز
-            {x:2,y:2}, {x:3,y:2}, {x:4,y:2}, {x:5,y:2}, {x:6,y:2},
-            {x:7,y:2}, {x:8,y:2}, {x:8,y:3}, {x:8,y:4}, {x:8,y:5},
-            // 10-19: مسیر آبی
-            {x:8,y:6}, {x:8,y:7}, {x:8,y:8}, {x:7,y:8}, {x:6,y:8},
-            {x:5,y:8}, {x:4,y:8}, {x:3,y:8}, {x:2,y:8}, {x:2,y:7},
-            // 20-29: مسیر سبز
-            {x:2,y:6}, {x:2,y:5}, {x:2,y:4}, {x:2,y:3}, {x:3,y:3},
-            {x:4,y:3}, {x:5,y:3}, {x:6,y:3}, {x:7,y:3}, {x:7,y:4},
-            // 30-39: مسیر زرد
-            {x:7,y:5}, {x:7,y:6}, {x:6,y:6}, {x:5,y:6}, {x:4,y:6},
-            {x:3,y:6}, {x:3,y:5}, {x:3,y:4}, {x:4,y:4}, {x:5,y:4}
-        ];
+            function initAudio() {
+                if (!audioCtx) {
+                    audioCtx = new AudioContext();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+            }
 
-        // خانه‌های امن
-        const safePositions = [0, 8, 13, 21, 26, 34, 39];
+            function playSound(type) {
+                if (!soundsEnabled || !audioCtx) return;
+                
+                const now = audioCtx.currentTime;
+                
+                switch(type) {
+                    case 'dice': {
+                        for (let i = 0; i < 3; i++) {
+                            const osc = audioCtx.createOscillator();
+                            const gain = audioCtx.createGain();
+                            osc.connect(gain);
+                            gain.connect(audioCtx.destination);
+                            osc.frequency.value = 400 + i * 100;
+                            gain.gain.value = 0.1;
+                            osc.start(now + i * 0.05);
+                            gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.05 + 0.1);
+                            osc.stop(now + i * 0.05 + 0.1);
+                        }
+                        break;
+                    }
+                    case 'move': {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        osc.frequency.value = 600;
+                        gain.gain.value = 0.1;
+                        osc.start(now);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+                        osc.stop(now + 0.1);
+                        break;
+                    }
+                    case 'enter': {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        osc.frequency.setValueAtTime(400, now);
+                        osc.frequency.exponentialRampToValueAtTime(800, now + 0.2);
+                        gain.gain.value = 0.15;
+                        osc.start(now);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+                        osc.stop(now + 0.3);
+                        break;
+                    }
+                    case 'eat': {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        osc.frequency.value = 200;
+                        gain.gain.value = 0.2;
+                        osc.start(now);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                        osc.stop(now + 0.2);
+                        break;
+                    }
+                    case 'win': {
+                        const notes = [523, 659, 784, 1046];
+                        notes.forEach((freq, i) => {
+                            const osc = audioCtx.createOscillator();
+                            const gain = audioCtx.createGain();
+                            osc.connect(gain);
+                            gain.connect(audioCtx.destination);
+                            osc.frequency.value = freq;
+                            gain.gain.value = 0.15;
+                            osc.start(now + i * 0.15);
+                            gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.15 + 0.3);
+                            osc.stop(now + i * 0.15 + 0.3);
+                        });
+                        break;
+                    }
+                }
+            }
 
-        // متغیرهای بازی
-        let gamePlayers = [];
-        let currentPlayer = 0;
-        let gameActive = false;
-        let moving = false;
-        let extraTurn = false;
+            // ==================== تعریف ساختار صفحه منچ ====================
+            // این آرایه مشخص می‌کند هر خانه از گرید 15x15 چه نوع خانه‌ای است
+            const BOARD_LAYOUT = [
+                // 0: خالی, 1: مسیر قرمز, 2: مسیر آبی, 3: مسیر سبز, 4: مسیر زرد
+                // 5: خانه قرمز, 6: خانه آبی, 7: خانه سبز, 8: خانه زرد
+                // 9: پایان قرمز, 10: پایان آبی, 11: پایان سبز, 12: پایان زرد
+                // ستاره‌دار: خانه‌های امن
+                
+                /* ردیف 0 */ [0,0,0,0,0,5,5,5,5,5,0,0,0,0,0],
+                /* ردیف 1 */ [0,0,0,0,0,5,5,5,5,5,0,0,0,0,0],
+                /* ردیف 2 */ [0,0,0,0,0,5,5,5,5,5,0,0,0,0,0],
+                /* ردیف 3 */ [0,0,0,0,0,5,5,5,5,5,0,0,0,0,0],
+                /* ردیف 4 */ [0,0,0,0,0,5,5,5,5,5,0,0,0,0,0],
+                /* ردیف 5 */ [8,8,8,8,8,1,1,1,1,1,2,2,2,2,2],
+                /* ردیف 6 */ [8,8,8,8,8,1,9,9,9,1,2,10,10,10,2],
+                /* ردیف 7 */ [8,8,8,8,8,1,9,9,9,1,2,10,10,10,2],
+                /* ردیف 8 */ [8,8,8,8,8,1,9,9,9,1,2,10,10,10,2],
+                /* ردیف 9 */ [8,8,8,8,8,1,1,1,1,1,2,2,2,2,2],
+                /* ردیف 10*/ [0,0,0,0,0,7,7,7,7,7,0,0,0,0,0],
+                /* ردیف 11*/ [0,0,0,0,0,7,7,7,7,7,0,0,0,0,0],
+                /* ردیف 12*/ [0,0,0,0,0,7,7,7,7,7,0,0,0,0,0],
+                /* ردیف 13*/ [0,0,0,0,0,7,7,7,7,7,0,0,0,0,0],
+                /* ردیف 14*/ [0,0,0,0,0,7,7,7,7,7,0,0,0,0,0]
+            ];
 
-        // ==================== صفحه ====================
-        function createBoard() {
-            const board = document.getElementById('board');
-            board.innerHTML = '';
+            // موقعیت‌های امن (ستاره‌دار)
+            const SAFE_POSITIONS = [
+                {row:5, col:5}, {row:5, col:9}, {row:9, col:5}, {row:9, col:9}, // چهار گوشه مسیر
+                {row:7, col:0}, {row:7, col:14}, {row:0, col:7}, {row:14, col:7} // مرکز هر ضلع
+            ];
 
-            // 9x9 گرید
-            for (let y = 0; y < 9; y++) {
-                for (let x = 0; x < 9; x++) {
-                    const cell = document.createElement('div');
-                    cell.className = 'cell';
-                    cell.dataset.x = x;
-                    cell.dataset.y = y;
+            // مسیر اصلی برای حرکت (به ترتیب)
+            const MAIN_PATH = [
+                {row:5, col:5}, {row:5, col:6}, {row:5, col:7}, {row:5, col:8}, {row:5, col:9},
+                {row:6, col:9}, {row:7, col:9}, {row:8, col:9}, {row:9, col:9},
+                {row:9, col:8}, {row:9, col:7}, {row:9, col:6}, {row:9, col:5},
+                {row:8, col:5}, {row:7, col:5}, {row:6, col:5},
+                {row:5, col:5} // برگشت به اول (برای حرکت دایره‌ای)
+            ];
 
-                    // تشخیص نوع خانه
-                    const pathIndex = path.findIndex(p => p.x === x && p.y === y);
-                    
-                    if (pathIndex !== -1) {
-                        // مسیر اصلی
-                        if (pathIndex < 10) cell.classList.add('path-red');
-                        else if (pathIndex < 20) cell.classList.add('path-blue');
-                        else if (pathIndex < 30) cell.classList.add('path-green');
-                        else cell.classList.add('path-yellow');
+            // ==================== تعریف بازیکنان ====================
+            const PLAYERS = [
+                { id: 0, name: 'قرمز', emoji: '🔴', color: 'red', homePos: {row:0, col:5}, finishStart: 40 },
+                { id: 1, name: 'آبی', emoji: '🔵', color: 'blue', homePos: {row:5, col:10}, finishStart: 44 },
+                { id: 2, name: 'سبز', emoji: '🟢', color: 'green', homePos: {row:10, col:5}, finishStart: 48 },
+                { id: 3, name: 'زرد', emoji: '🟡', color: 'yellow', homePos: {row:5, col:0}, finishStart: 52 }
+            ];
 
-                        if (safePositions.includes(pathIndex)) {
+            // متغیرهای اصلی بازی
+            let players = [];
+            let currentPlayerIndex = 0;
+            let gameActive = false;
+            let isMoving = false;
+            let extraTurn = false;
+
+            // ==================== ساخت صفحه ====================
+            function createBoard() {
+                const board = document.getElementById('board');
+                board.innerHTML = '';
+                
+                for (let r = 0; r < 15; r++) {
+                    for (let c = 0; c < 15; c++) {
+                        const cell = document.createElement('div');
+                        cell.className = 'cell';
+                        cell.dataset.row = r;
+                        cell.dataset.col = c;
+                        
+                        const cellType = BOARD_LAYOUT[r][c];
+                        
+                        // تعیین کلاس بر اساس نوع خانه
+                        if (cellType >= 1 && cellType <= 4) {
+                            // مسیر اصلی
+                            const colors = ['path-red', 'path-blue', 'path-green', 'path-yellow'];
+                            cell.classList.add(colors[cellType-1]);
+                        } else if (cellType >= 5 && cellType <= 8) {
+                            // خانه‌های شروع
+                            const homes = ['home-red', 'home-blue', 'home-green', 'home-yellow'];
+                            cell.classList.add(homes[cellType-5]);
+                        } else if (cellType >= 9 && cellType <= 12) {
+                            // خانه‌های انتهایی
+                            const finishes = ['finish-red', 'finish-blue', 'finish-green', 'finish-yellow'];
+                            cell.classList.add(finishes[cellType-9]);
+                        }
+                        
+                        // بررسی خانه‌های امن
+                        if (SAFE_POSITIONS.some(pos => pos.row === r && pos.col === c)) {
                             cell.classList.add('safe');
                         }
+                        
+                        board.appendChild(cell);
                     }
-                    
-                    // خانه‌های شروع
-                    if ((x < 2 && y < 2)) cell.classList.add('home-red');
-                    if ((x > 6 && y < 2)) cell.classList.add('home-blue');
-                    if ((x < 2 && y > 6)) cell.classList.add('home-green');
-                    if ((x > 6 && y > 6)) cell.classList.add('home-yellow');
-
-                    // خانه‌های نهایی
-                    if (x === 4 && y === 4) {
-                        cell.classList.add('finish-red', 'finish-blue', 'finish-green', 'finish-yellow');
-                    }
-
-                    board.appendChild(cell);
                 }
             }
-        }
 
-        // ==================== نمایش مهره‌ها ====================
-        function updatePieces() {
-            document.querySelectorAll('.piece').forEach(p => p.remove());
-
-            gamePlayers.forEach((player, pIndex) => {
-                player.pieces.forEach((pos, pieceIndex) => {
-                    let cell;
-                    
-                    if (pos === -1) {
-                        // در خانه
-                        const startX = [0,7,0,7][pIndex];
-                        const startY = [0,0,7,7][pIndex];
-                        cell = document.querySelector(`[data-x="${startX + (pieceIndex%2)}"][data-y="${startY + Math.floor(pieceIndex/2)}"]`);
-                    } else if (pos < 40) {
-                        // در مسیر
-                        cell = document.querySelector(`[data-x="${path[pos].x}"][data-y="${path[pos].y}"]`);
-                    }
-
-                    if (cell) {
-                        const piece = document.createElement('span');
-                        piece.className = `piece ${player.color}-piece`;
-                        piece.textContent = pieceIndex + 1;
-                        cell.appendChild(piece);
-                    }
-                });
-            });
-        }
-
-        // ==================== صدا ====================
-        function playSound(type) {
-            // ساده شده - بدون صدا برای جلوگیری از خطا
-        }
-
-        // ==================== شروع بازی ====================
-        function startGame(count) {
-            gamePlayers = [];
-            for (let i = 0; i < count; i++) {
-                gamePlayers.push({
-                    ...players[i],
-                    pieces: [-1, -1, -1, -1]
+            // ==================== نمایش مهره‌ها ====================
+            function updateBoard() {
+                // پاک کردن همه مهره‌ها
+                document.querySelectorAll('.piece').forEach(p => p.remove());
+                
+                players.forEach((player, pIdx) => {
+                    player.pieces.forEach((piecePos, pieceIdx) => {
+                        if (piecePos >= 0) {
+                            // پیدا کردن سلول متناسب با موقعیت
+                            let cell;
+                            if (piecePos < 40) {
+                                // در مسیر اصلی
+                                const pos = MAIN_PATH[piecePos % MAIN_PATH.length];
+                                cell = document.querySelector(`[data-row="${pos.row}"][data-col="${pos.col}"]`);
+                            } else {
+                                // در مسیر انتهایی
+                                const finishIndex = piecePos - player.finishStart;
+                                if (finishIndex >= 0 && finishIndex < 4) {
+                                    // خانه‌های انتهایی هر بازیکن
+                                    // این بخش باید بر اساس بازیکن و شماره مهره تکمیل شود
+                                }
+                            }
+                            
+                            if (cell) {
+                                const piece = document.createElement('span');
+                                piece.className = `piece ${player.color}`;
+                                piece.textContent = pieceIdx + 1;
+                                piece.dataset.player = pIdx;
+                                piece.dataset.piece = pieceIdx;
+                                cell.appendChild(piece);
+                            }
+                        }
+                    });
                 });
             }
 
-            currentPlayer = 0;
-            gameActive = true;
-            moving = false;
-            extraTurn = false;
-
-            document.getElementById('selector').style.display = 'none';
-            document.getElementById('status').style.display = 'flex';
-            document.getElementById('dice').textContent = '🎲';
-            document.getElementById('diceShow').textContent = '🎲 -';
-            document.getElementById('turn').innerHTML = `${gamePlayers[0].emoji} ${gamePlayers[0].name}`;
-            document.getElementById('message').textContent = `${gamePlayers[0].emoji} تاس بنداز`;
-
-            updatePieces();
-            document.getElementById('rollBtn').disabled = false;
-        }
-
-        // ==================== تاس ====================
-        async function rollDice() {
-            if (!gameActive || moving) return;
-
-            moving = true;
-            document.getElementById('rollBtn').disabled = true;
-
-            // انیمیشن تاس
-            const dice = document.getElementById('dice');
-            for (let i = 0; i < 10; i++) {
-                dice.textContent = ['⚀','⚁','⚂','⚃','⚄','⚅'][Math.floor(Math.random()*6)];
-                await new Promise(r => setTimeout(r, 50));
+            // ==================== شروع بازی جدید ====================
+            function startNewGame(playerCount) {
+                initAudio();
+                playSound('enter');
+                
+                players = [];
+                for (let i = 0; i < playerCount; i++) {
+                    players.push({
+                        ...PLAYERS[i],
+                        pieces: [-1, -1, -1, -1] // -1 یعنی در خانه
+                    });
+                }
+                
+                currentPlayerIndex = 0;
+                gameActive = true;
+                isMoving = false;
+                extraTurn = false;
+                
+                document.getElementById('playerSelector').style.display = 'none';
+                document.getElementById('gameStatus').style.display = 'flex';
+                document.getElementById('dice').textContent = '🎲';
+                document.getElementById('diceValue').textContent = '🎲 -';
+                document.getElementById('turnIndicator').innerHTML = `${players[0].emoji} ${players[0].name}`;
+                document.getElementById('gameMessage').textContent = `${players[0].emoji} تاس بنداز تا مهره رو وارد کنی`;
+                
+                updateBoard();
+                document.getElementById('rollDiceBtn').disabled = false;
             }
 
-            const value = Math.floor(Math.random() * 6) + 1;
-            dice.textContent = ['1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣'][value-1];
-            document.getElementById('diceShow').textContent = `🎲 ${value}`;
-
-            await move(value);
-
-            moving = false;
-            document.getElementById('rollBtn').disabled = false;
-        }
-
-        // ==================== حرکت ====================
-        async function move(value) {
-            const player = gamePlayers[currentPlayer];
-
-            // تاس 6 و مهره در خانه
-            if (value === 6 && player.pieces.includes(-1)) {
-                const index = player.pieces.indexOf(-1);
-                player.pieces[index] = 0;
-                updatePieces();
-                document.getElementById('message').textContent = `${player.emoji} مهره جدید وارد شد`;
-                extraTurn = true;
-                return;
+            // ==================== پرتاب تاس ====================
+            async function handleRoll() {
+                if (!gameActive || isMoving) return;
+                
+                isMoving = true;
+                document.getElementById('rollDiceBtn').disabled = true;
+                
+                playSound('dice');
+                
+                const diceNumber = Math.floor(Math.random() * 6) + 1;
+                await animateDice(diceNumber);
+                
+                document.getElementById('diceValue').textContent = `🎲 ${diceNumber}`;
+                
+                await processMove(diceNumber);
+                
+                isMoving = false;
+                document.getElementById('rollDiceBtn').disabled = false;
             }
 
-            // حرکت مهره
-            const activePieces = player.pieces.filter(p => p >= 0 && p < 40);
-            if (activePieces.length === 0) {
-                document.getElementById('message').textContent = `${player.emoji} مهره‌ای نداری`;
-                nextTurn();
-                return;
+            // ==================== انیمیشن تاس ====================
+            async function animateDice(finalValue) {
+                const diceEl = document.getElementById('dice');
+                const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+                
+                for (let i = 0; i < 12; i++) {
+                    const randomIndex = Math.floor(Math.random() * 6);
+                    diceEl.textContent = diceFaces[randomIndex];
+                    await new Promise(r => setTimeout(r, 60));
+                }
+                
+                const diceEmoji = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣'];
+                diceEl.textContent = diceEmoji[finalValue - 1];
             }
 
-            const pieceIndex = player.pieces.findIndex(p => p >= 0 && p < 40);
-            let newPos = player.pieces[pieceIndex] + value;
-
-            if (newPos >= 40) {
-                document.getElementById('message').textContent = `${player.emoji} به خانه آخر رسید`;
-                player.pieces[pieceIndex] = 40 + (newPos - 40);
-                updatePieces();
-            } else {
+            // ==================== پردازش حرکت ====================
+            async function processMove(diceNumber) {
+                const player = players[currentPlayerIndex];
+                
+                // اگر ۶ آمد و مهره در خانه داریم
+                if (diceNumber === 6 && player.pieces.some(p => p === -1)) {
+                    const pieceIndex = player.pieces.findIndex(p => p === -1);
+                    player.pieces[pieceIndex] = 0; // بذار روی خانه شروع مسیر
+                    playSound('enter');
+                    updateBoard();
+                    document.getElementById('gameMessage').textContent = 
+                        `${player.emoji} مهره جدید وارد بازی شد!`;
+                    extraTurn = true;
+                    return;
+                }
+                
+                // حرکت مهره‌های داخل بازی
+                const activePieces = player.pieces
+                    .map((pos, idx) => ({ pos, idx }))
+                    .filter(p => p.pos >= 0 && p.pos < 40);
+                
+                if (activePieces.length === 0) {
+                    document.getElementById('gameMessage').textContent = 
+                        `${player.emoji} مهره‌ای برای حرکت نداری!`;
+                    nextTurn();
+                    return;
+                }
+                
+                // ساده‌سازی: اولین مهره رو حرکت بده
+                const piece = activePieces[0];
+                let newPos = piece.pos + diceNumber;
+                
+                if (newPos >= 40) {
+                    // وارد مسیر انتهایی بشه
+                    const finishPath = newPos - 40;
+                    if (finishPath < 4) {
+                        newPos = player.finishStart + finishPath;
+                    } else {
+                        document.getElementById('gameMessage').textContent = 
+                            `${player.emoji} این حرکت مجاز نیست!`;
+                        nextTurn();
+                        return;
+                    }
+                }
+                
                 // حرکت تکه‌تکه
-                for (let i = player.pieces[pieceIndex] + 1; i <= newPos; i++) {
-                    player.pieces[pieceIndex] = i;
-                    updatePieces();
+                for (let i = piece.pos + 1; i <= newPos; i++) {
+                    if (i < 40) {
+                        player.pieces[piece.idx] = i;
+                    } else {
+                        player.pieces[piece.idx] = i;
+                    }
+                    updateBoard();
+                    playSound('move');
                     await new Promise(r => setTimeout(r, 150));
                 }
+                
+                // خوردن مهره حریف
+                checkEating(player, piece.idx, newPos);
+                
+                // بررسی برد
+                if (player.pieces.every(p => p >= player.finishStart)) {
+                    document.getElementById('gameMessage').textContent = 
+                        `🏆 ${player.emoji} برنده شد! 🏆`;
+                    playSound('win');
+                    gameActive = false;
+                    return;
+                }
+                
+                if (diceNumber === 6) {
+                    document.getElementById('gameMessage').textContent = 
+                        `${player.emoji} دوباره تاس بنداز (۶ آوردی)!`;
+                    extraTurn = true;
+                } else {
+                    nextTurn();
+                }
             }
 
-            // خوردن
-            if (!safePositions.includes(newPos) && newPos < 40) {
-                gamePlayers.forEach((p, idx) => {
-                    if (idx !== currentPlayer) {
-                        p.pieces.forEach((pos, i) => {
-                            if (pos === newPos) {
-                                p.pieces[i] = -1;
-                                document.getElementById('message').textContent = 
-                                    `${player.emoji} مهره ${p.emoji} رو خورد!`;
+            // ==================== خوردن مهره حریف ====================
+            function checkEating(currentPlayer, pieceIdx, newPos) {
+                // اگر در خانه امن هست، نخور
+                const cell = document.querySelector(`[data-row="${MAIN_PATH[newPos]?.row}"][data-col="${MAIN_PATH[newPos]?.col}"]`);
+                if (cell && cell.classList.contains('safe')) return;
+                
+                players.forEach((player, pIdx) => {
+                    if (pIdx !== currentPlayerIndex) {
+                        player.pieces.forEach((pos, idx) => {
+                            if (pos === newPos && newPos < 40) {
+                                player.pieces[idx] = -1; // برگشت به خانه
+                                playSound('eat');
+                                document.getElementById('gameMessage').textContent = 
+                                    `🎯 ${currentPlayer.emoji} مهره ${player.emoji} رو خورد!`;
                             }
                         });
                     }
                 });
+                updateBoard();
             }
 
-            // برد
-            if (player.pieces.every(p => p >= 40)) {
-                document.getElementById('message').textContent = `🏆 ${player.emoji} برنده شد! 🏆`;
-                gameActive = false;
-                return;
+            // ==================== نوبت بعدی ====================
+            function nextTurn() {
+                do {
+                    currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+                } while (players[currentPlayerIndex].pieces.every(p => p >= 40) && 
+                         players.some(p => !p.pieces.every(p => p >= 40)));
+                
+                document.getElementById('turnIndicator').innerHTML = 
+                    `${players[currentPlayerIndex].emoji} ${players[currentPlayerIndex].name}`;
+                document.getElementById('gameMessage').textContent = 
+                    `${players[currentPlayerIndex].emoji} نوبت توئه`;
+                extraTurn = false;
             }
 
-            if (value === 6) {
-                document.getElementById('message').textContent = `${player.emoji} دوباره تاس بنداز`;
-                extraTurn = true;
-            } else {
-                nextTurn();
-            }
-        }
-
-        // ==================== نوبت بعدی ====================
-        function nextTurn() {
-            do {
-                currentPlayer = (currentPlayer + 1) % gamePlayers.length;
-            } while (gamePlayers[currentPlayer].pieces.every(p => p >= 40));
-
-            document.getElementById('turn').innerHTML = `${gamePlayers[currentPlayer].emoji} ${gamePlayers[currentPlayer].name}`;
-            document.getElementById('message').textContent = `${gamePlayers[currentPlayer].emoji} نوبت توئه`;
-            extraTurn = false;
-        }
-
-        // ==================== رویدادها ====================
-        document.addEventListener('DOMContentLoaded', () => {
-            createBoard();
-
-            // انتخاب تعداد
-            document.querySelectorAll('.player-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('.player-btn').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
+            // ==================== رویدادها ====================
+            document.addEventListener('DOMContentLoaded', () => {
+                createBoard();
+                
+                // انتخاب تعداد بازیکنان
+                document.querySelectorAll('.player-count-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        document.querySelectorAll('.player-count-btn').forEach(b => 
+                            b.classList.remove('active'));
+                        this.classList.add('active');
+                    });
+                });
+                
+                // شروع بازی
+                document.getElementById('startGameBtn').addEventListener('click', () => {
+                    const activeBtn = document.querySelector('.player-count-btn.active');
+                    const count = parseInt(activeBtn.dataset.count);
+                    startNewGame(count);
+                });
+                
+                // دکمه تاس
+                document.getElementById('rollDiceBtn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    handleRoll();
+                });
+                
+                // تاچ روی صفحه بازی
+                document.getElementById('board').addEventListener('click', (e) => {
+                    if (gameActive && !isMoving) {
+                        handleRoll();
+                    }
+                });
+                
+                document.getElementById('board').addEventListener('touchstart', (e) => {
+                    if (gameActive && !isMoving) {
+                        e.preventDefault();
+                        handleRoll();
+                    }
                 });
             });
-
-            // شروع
-            document.getElementById('startBtn').addEventListener('click', () => {
-                const count = parseInt(document.querySelector('.player-btn.active').dataset.count);
-                startGame(count);
-            });
-
-            // تاس
-            document.getElementById('rollBtn').addEventListener('click', rollDice);
-
-            // تاچ روی صفحه
-            document.getElementById('board').addEventListener('click', () => {
-                if (gameActive && !moving) rollDice();
-            });
-        });
+        })();
     </script>
 </body>
-</html>      
+</html>           
